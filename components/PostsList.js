@@ -2,6 +2,7 @@ import React from 'react'
 import Post from './Post'
 
 export default class PostsList extends React.Component {
+
 	constructor() { 
 		super()
 		this.state = {
@@ -17,26 +18,45 @@ export default class PostsList extends React.Component {
 		}
 
 		return <div className="PostsList">
-			{this.props.showFilter ?
-
+			
 					<p className="post-filter">
-						<span className="group">
-						Filter:
-						<a
-							className={this.state.filter === 'all' ? 'active' : ''}
-							onClick={() => this.setState({filter:'all'})}
-							>All</a>
-						<a
-							className={this.state.filter === 'all' ? 'active' : ''}
-							onClick={() => this.setState({filter:'pending'})}
-							>Pending</a>
-						</span>
-					</p>
-				: null}
 
-			{posts.map(post=> {
-				return <Post key={post.id} post={post}/>
-			})}
+						{this.props.showFilter ?
+							
+								<span className="group">
+								Filter:
+								<a
+									className={this.state.filter === 'all' ? 'active' : ''}
+									onClick={() => this.setState({filter:'all'})}
+									>All</a>
+								<a
+									className={this.state.filter === 'all' ? 'active' : ''}
+									onClick={() => this.setState({filter:'pending'})}
+									>Pending</a>
+								</span>
+
+						: null}
+
+						{this.props.isLoadingPosts ?
+
+								<span className="loading-status">
+									Loading Posts ...
+								</span>
+
+						: null}	
+					</p>
+
+
+						{this.props.isLoadngPosts === false && posts.length === 0 ?
+
+							<p>No posts have been published, stand by ...</p>
+
+						 : null}					
+
+
+					{posts.map(post=> {
+							return <Post key={post.id} post={post}/>
+					})}
 		</div>
 	}
 

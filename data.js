@@ -11,7 +11,7 @@ export default [
         "modified_gmt":"2016-08-02T08:47:32",
         "password":"",
         "slug":"adwadawdawdwad",
-        "status":"publish",
+        "status":"pending",
         "type":"post",
         "link":"http:\/\/wordpress.dev\/blog\/2016\/08\/02\/adwadawdawdwad\/",
         "title":{

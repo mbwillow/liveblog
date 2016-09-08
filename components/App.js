@@ -2,6 +2,7 @@ import React from 'react'
 import api from 'wordpress-rest-api-oauth-1'
 import Header from './Header'
 import PostsList from './PostsList'
+import PostBox from './PostBox.js'
 
 const SITE_URL = 'http://awor.local/'
 const API_KEY = 'JTFiOCfq1eGE'
@@ -45,6 +46,11 @@ export default class App extends React.Component {
 
 	componentDidMount(){
 		this.loadPosts()
+		this.interval = setInterval( () => this.loadPosts(), 8000)
+	}
+
+	componentWillUnmount(){
+		clearInterval( this.interval )
 	}
 
 
@@ -55,7 +61,7 @@ export default class App extends React.Component {
 
 		let args = { 
 			_embed : true ,
-			per_page: 100,
+			per_page: 10,
 			status: this.state.user ?  'any' : 'publish',
 			context: this.state.user ?  'edit' : 'view'
 
@@ -77,11 +83,26 @@ export default class App extends React.Component {
 	}
 
 	onLoggedIn() {
-		window.apiHandler.get('/wp/v2/users/me', {_envelope: true})
+		window.apiHandler.get('/wp/v2/users/me', {_envelope: true, context: 'edit'})
 			.then(data => data.body)
 			.then(user => this.setState({ user }))
 			.then( () => this.loadPosts() )
 			
+	}
+
+	onRejectPost (post){
+
+		window.apiHandler.del('/wp/V2/posts/' + post.id)
+			.then ( () => this.loadPosts() )
+
+	}
+
+
+	onApprovePost (post){		
+
+		window.apiHandler.post('/wp/V2/posts/' + post.id, 
+			{status:'publish'})
+			.then ( () => this.loadPosts() )
 	}
 
 	render() {
@@ -90,12 +111,29 @@ export default class App extends React.Component {
 				user={this.state.user}
 				onLogin={() => this.onLogin()}
 				onLogout={() => this.onLogout()}
-			/>			
+			/>	
+
 			<div className="posts">
+				
+				{this.state.user && this.state.user.capabilities.edit_posts ?
+					<PostBox 
+						user={this.state.user}
+						onDidPublish={ post => { 
+							this.loadPosts()
+							} 
+						}
+						/>
+				: null }
+
 				<PostsList 
-					isLoadingPosts={this.state.isLoadingPosts}
+					user = {this.state.user}
 					posts={this.state.posts} 
-					showFilter={!!this.state.user}/>
+					isLoadingPosts={this.state.isLoadingPosts}					
+					showFilter={this.state.user}
+					onRejectPost = { post => this.onRejectPost(post)}
+					onApprovePost = { post => this.onApprovePost(post)}
+				/>
+
 			</div>
 		</div>		
 	}

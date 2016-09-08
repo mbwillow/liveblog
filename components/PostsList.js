@@ -55,7 +55,13 @@ export default class PostsList extends React.Component {
 
 
 					{posts.map(post=> {
-							return <Post key={post.id} post={post}/>
+							return <Post
+								user={this.props.user} 
+								key={post.id} 
+								post={post}
+								onRejectPost = {this.props.onRejectPost}
+								onApprovePost = {this.props.onApprovePost}	
+								/>
 					})}
 		</div>
 	}

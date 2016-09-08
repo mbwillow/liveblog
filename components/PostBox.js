@@ -11,7 +11,7 @@ export default class PostBox extends React.Component {
 		}
 	}
 
-	OnCreatePost(status){
+	onCreatePost(status){
 
 		this.setState({isSaving:true})
 

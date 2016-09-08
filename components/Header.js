@@ -5,6 +5,8 @@ export default class Header extends React.Component {
 		return 	<header className="Header">
 					<img src="images/logo.png" />
 					<p className="actions">
+						<button className="switch-site"
+							onClick={ () => this.props.onSwitchSite()}>Switch Site </button>
 						{this.props.user ?
 							<button  onClick={() => this.props.onLogout()} className= "logout">Log Out</button>
 						:

@@ -61,6 +61,7 @@ export default class PostsList extends React.Component {
 								post={post}
 								onRejectPost = {this.props.onRejectPost}
 								onApprovePost = {this.props.onApprovePost}	
+								onLikePost = {this.props.onLikePost}
 								/>
 					})}
 		</div>
